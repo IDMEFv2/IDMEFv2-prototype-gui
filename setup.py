@@ -252,12 +252,8 @@ setup(
         'prewikka.dataprovider.backend': [
             'ElasticsearchIDMEFv2 = prewikka.dataprovider.plugins.idmefv2.elasticsearch:ElasticsearchIDMEFv2Plugin',
             'ElasticsearchLog = prewikka.dataprovider.plugins.log.elasticsearch:ElasticsearchLogPlugin',
-            'IDMEFAlert = prewikka.dataprovider.plugins.idmef:IDMEFAlertPlugin',
-            'IDMEFHeartbeat = prewikka.dataprovider.plugins.idmef:IDMEFHeartbeatPlugin',
         ],
         'prewikka.dataprovider.type': [
-            'alert = prewikka.dataprovider.idmef:IDMEFAlertProvider',
-            'heartbeat = prewikka.dataprovider.idmef:IDMEFHeartbeatProvider',
             'IDMEFv2 = prewikka.dataprovider.idmefv2:IDMEFv2API',
             'log = prewikka.dataprovider.log:LogAPI',
         ],
@@ -273,13 +269,11 @@ setup(
         'prewikka.views': [
             'About = prewikka.views.about:About',
             'AboutPlugin = prewikka.views.aboutplugin:AboutPlugin',
-            'AgentPlugin = prewikka.views.agents:AgentPlugin',
-            'AlertDataSearch = prewikka.views.datasearch.alert:AlertDataSearch',
+            'IDMEFv2DataSearch = prewikka.views.datasearch.idmefv2:IDMEFv2DataSearch',
             'AlertStats = prewikka.views.statistics.alertstats:AlertStats',
             'CrontabView = prewikka.views.crontab:CrontabView',
             'Custom = prewikka.views.custom:Custom',
             'FilterPlugin = prewikka.plugins.filter:FilterPlugin',
-            'HeartbeatDataSearch = prewikka.views.datasearch.heartbeat:HeartbeatDataSearch',
             'IDMEFnav = prewikka.views.idmefnav:IDMEFNav',
             'LogDataSearch = prewikka.views.datasearch.log:LogDataSearch',
             'MessageSummary = prewikka.views.messagesummary:MessageSummary',
