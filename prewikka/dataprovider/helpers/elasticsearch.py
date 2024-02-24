@@ -642,7 +642,7 @@ class ElasticsearchQuery(object):
         return {
             "date_histogram": {
                 "field": field,
-                "interval": interval,
+                "calendar_interval": interval,
                 "format": form,
                 "time_zone": env.request.user.timezone.zone,
                 "order": {"_key": order or "asc"},
