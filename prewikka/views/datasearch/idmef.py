@@ -87,7 +87,7 @@ class IDMEFFormatter(datasearch.Formatter):
         out2 = []
         key = text_type(iclass)
 
-        child = child if isinstance(child, collections.Iterable) else [child]
+        child = child if isinstance(child, collections.abc.Iterable) else [child]
         for j in filter(None, map(lambda x: self._format_generic(root, x), child)):
             out2.append(resource.HTMLNode("ul", *j, _class="object %s dp-%d" % (key, self._get_priority(iclass))))
 
@@ -230,7 +230,7 @@ class IDMEFDataSearch(datasearch.DataSearch):
                 continue
 
             if vtype == prelude.IDMEFValue.TYPE_CLASS:
-                if isinstance(child, collections.Iterable):
+                if isinstance(child, collections.abc.Iterable):
                     for j in child:
                         self._recurse_idmef(output, j)
                 else:

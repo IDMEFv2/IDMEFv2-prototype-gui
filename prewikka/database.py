@@ -480,7 +480,7 @@ class DatabaseCommon(object):
         self._dbtype = settings["type"]
 
     def _get_prefilter(self, v):
-        if not(isinstance(v, (text_type, bytes))) and isinstance(v, collections.Iterable):
+        if not(isinstance(v, (text_type, bytes))) and isinstance(v, collections.abc.Iterable):
             return self.__ESCAPE_PREFILTER["iterable"]
         else:
             return self.__ESCAPE_PREFILTER.get(type(v))

@@ -56,7 +56,7 @@ _MAKO_TEMPLATE_LOOKUP = mako.lookup.TemplateLookup(directories=[_MODULE_PATH], *
 # We cannot inherit dict directly because it's __json__() method would never be called. Simplejson
 # only call the user provided encoding callback when the object is not known to be serializable.
 
-class _Dataset(collections.MutableMapping):
+class _Dataset(collections.abc.MutableMapping):
     def __init__(self, template, *args, **kwargs):
         self._d = dict(*args, **kwargs)
         self._template = template

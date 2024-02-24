@@ -61,7 +61,7 @@ class ConfigMissingError(ConfigError, AttributeError):
                                       {'name': key}))
 
 
-class ConfigSection(collections.Mapping):
+class ConfigSection(collections.abc.Mapping):
     def __init__(self, name):
         object.__setattr__(self, "_instance_name", name)
         object.__setattr__(self, "_od", collections.OrderedDict())
