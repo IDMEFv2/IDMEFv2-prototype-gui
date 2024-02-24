@@ -36,5 +36,4 @@ class ElasticsearchIDMEFv2Plugin(ElasticsearchPlugin):
     plugin_version = version.__version__
     plugin_copyright = version.__copyright__
     plugin_description = N_("Plugin for querying IDMEFv2 from Elasticsearch")
-    plugin_locale = version.__locale__
     type = "idmefv2"
