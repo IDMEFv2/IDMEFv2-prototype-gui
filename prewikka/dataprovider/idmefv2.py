@@ -47,7 +47,7 @@ class IDMEFv2API(PathParser):
     plugin_license = version.__license__
     plugin_copyright = version.__copyright__
     plugin_description = N_("Provides an API to fetch IDMEFv2")
-    dataprovider_label = N_("Incidents")
+    dataprovider_label = N_("Alerts")
 
     def __init__(self):
         PathParser.__init__(self, _IDMEFv2_PATHS, "create_time")
