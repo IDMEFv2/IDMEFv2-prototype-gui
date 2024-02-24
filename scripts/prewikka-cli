@@ -262,10 +262,6 @@ if __name__ == "__main__":
     interpreter = PrewikkaCLI()
     env.request = FakeRequest()
 
-    if getpass.getuser() != "prewikka":
-        print("*** %s" % _("prewikka-cli must be executed as the prewikka user"))
-        sys.exit(SYSTEM_ERROR)
-
     main.Core.from_config(args.config, ignore_errors=False)
     env.request.user = env.auth.authenticate(args.user, no_password_check=True)
     env.request.user.set_locale()
