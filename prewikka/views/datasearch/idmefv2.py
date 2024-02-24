@@ -118,6 +118,7 @@ class IDMEFv2DataSearch(datasearch.DataSearch):
         ("idmefv2.description", N_("Description")),
         ("idmefv2.source(0).ip", N_("Source")),
         ("idmefv2.target(0).ip", N_("Target")),
+        ("idmefv2.target(0).location", N_("Target location")),
     ])
 
     def _get_default_cells(self, obj, search):
