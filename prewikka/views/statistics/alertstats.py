@@ -234,7 +234,7 @@ class AlertStats(StaticStats):
         {
             "title": N_("Top {limit} Sources Trend"),
             "category": "chronology",
-            "path": "idmefv2.source.ip",
+            "path": "idmefv2.source(0).ip",
             "width": 12,
         },
         {
