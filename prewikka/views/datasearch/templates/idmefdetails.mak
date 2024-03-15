@@ -1,10 +1,10 @@
 <%
-    def get_panel_class(severity):
+    def get_panel_class(priority):
         return {
             "low": "panel-success",
             "medium": "panel-warning",
             "high": "panel-danger"
-        }.get(severity, "panel-default")
+        }.get(priority, "panel-default")
 %>
 
 <div class="container">
@@ -25,12 +25,12 @@
             <tr>
               <th>${ _("Create time") }</th>
               <th>${ _("Start time") }</th>
-              <th>${ _("Cease time") }</th>
+              <th>${ _("End time") }</th>
             </tr>
             <tr>
               <td>${ alert.get('create_time') }</td>
               <td>${ alert.get('start_time') }</td>
-              <td>${ alert.get('cease_time') }</td>
+              <td>${ alert.get('end_time') }</td>
             </tr>
           </table>
           <table class="table table-striped table-bordered">
@@ -40,7 +40,7 @@
               <th>${ _("Note") }</th>
             </tr>
             <tr>
-              <td>${ ", ".join(alert.get('category', [])) }</td>
+              <td>${ ", ".join(alert.get('category', []) + alert.get('ext_category', [])) }</td>
               <td>${ alert.get('description') }</td>
               <td>${ alert.get('note') }</td>
             </tr>
@@ -48,13 +48,13 @@
           <table class="table table-striped table-bordered">
             <tr>
               <th>${ _("Entity") }</th>
-              <th>${ _("Severity") }</th>
+              <th>${ _("Priority") }</th>
               <th>${ _("Status") }</th>
               <th>${ _("References") }</th>
             </tr>
             <tr>
               <td>${ alert.get('entity') }</td>
-              <td>${ alert.get('severity') }</td>
+              <td>${ alert.get('priority') }</td>
               <td>${ alert.get('status') }</td>
               <td>${ ", ".join(alert.get('reference', [])) }</td>
             </tr>
@@ -89,9 +89,9 @@
               <th>${ _("Method") }</th>
             </tr>
             <tr>
-              <td>${ ", ".join(alert.get('analyzer.category', [])) }</td>
-              <td>${ ", ".join(alert.get('analyzer.data', [])) }</td>
-              <td>${ ", ".join(alert.get('analyzer.method', [])) }</td>
+              <td>${ ", ".join(alert.get('analyzer.category', []) + alert.get('analyzer.ext_category', [])) }</td>
+              <td>${ ", ".join(alert.get('analyzer.data', []) + alert.get('analyzer.ext_data', [])) }</td>
+              <td>${ ", ".join(alert.get('analyzer.method', []) + alert.get('analyzer.ext_method', [])) }</td>
             </tr>
           </table>
         </div>
@@ -238,27 +238,6 @@
             </tr>
             <tr>
               <td>${ alert.get('attachment.content') }</td>
-            </tr>
-          </table>
-        </div>
-      </div>
-      % endif
-      % if alert.get('observable.name'):
-      <div class="panel panel-theme">
-        <div class="panel-heading">
-          <h3 class="panel-title">${ _("Observable") }</h3>
-        </div>
-        <div class="panel-body">
-          <table class="table table-striped table-bordered">
-            <tr>
-              <th>${ _("Name") }</th>
-              <th>${ _("Reference") }</th>
-              <th>${ _("Content") }</th>
-            </tr>
-            <tr>
-              <td>${ alert.get('observable.name') }</td>
-              <td>${ alert.get('observable.reference') }</td>
-              <td>${ alert.get('observable.content') }</td>
             </tr>
           </table>
         </div>

@@ -65,7 +65,7 @@ class IDMEFv2Formatter(datasearch.Formatter):
     def format_value(self, field, value):
         node = datasearch.Formatter.format_value(self, re.sub(r"\(\d+\)", "", field), value)
 
-        if field != "severity":
+        if field != "priority":
             return node
 
         class_ = {
@@ -109,10 +109,10 @@ class IDMEFv2DataSearch(datasearch.DataSearch):
     formatter = IDMEFv2Formatter
     query_parser = IDMEFv2QueryParser
     criterion_config_default = "criterion"
-    groupby_default = ["severity"]
+    groupby_default = ["priority"]
     sort_path_default = "create_time"
     default_columns = collections.OrderedDict([
-        ("idmefv2.severity", N_("Severity")),
+        ("idmefv2.priority", N_("Priority")),
         ("idmefv2.create_time", N_("Create time")),
         ("idmefv2.category(0)", N_("Category")),
         ("idmefv2.description", N_("Description")),
@@ -173,15 +173,15 @@ class IDMEFv2DataSearch(datasearch.DataSearch):
     def _set_alerts_summary(self):
         severities = ["High", "Medium", "Low", "Info"]
         alerts = dict(env.dataprovider.query(
-            ["idmefv2.severity/group_by", "count(idmefv2.id)"],
+            ["idmefv2.priority/group_by", "count(idmefv2.id)"],
             env.request.menu.get_criteria()
         ))
 
         labels = {
-            "Info": utils.AttrObj(title=_("Minimal severity"), label="label-info"),
-            "Low": utils.AttrObj(title=_("Low severity"), label="label-success"),
-            "Medium": utils.AttrObj(title=_("Medium severity"), label="label-warning"),
-            "High": utils.AttrObj(title=_("High severity"), label="label-danger")
+            "Info": utils.AttrObj(title=_("Minimal priority"), label="label-info"),
+            "Low": utils.AttrObj(title=_("Low priority"), label="label-success"),
+            "Medium": utils.AttrObj(title=_("Medium priority"), label="label-warning"),
+            "High": utils.AttrObj(title=_("High priority"), label="label-danger")
         }
 
         data = []
@@ -189,7 +189,7 @@ class IDMEFv2DataSearch(datasearch.DataSearch):
             data.append(
                 resource.HTMLNode("a", localization.format_number(alerts.get(i, 0), short=True),
                                   title=labels[i].title, _class="label " + labels[i].label,
-                                  href=url_for("IDMEFv2DataSearch.forensic", criteria=Criterion("idmefv2.severity", "==", i)))
+                                  href=url_for("IDMEFv2DataSearch.forensic", criteria=Criterion("idmefv2.priority", "==", i)))
             )
 
         return utils.AttrObj(

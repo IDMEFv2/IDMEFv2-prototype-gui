@@ -42,7 +42,7 @@ _DEFAULT_GRAPHS = [
         'title': N_("Severities"),
         'category': "diagram",
         'type': "pie",
-        'path': "idmefv2.severity",
+        'path': "idmefv2.priority",
         'description': N_("This graph shows the severities of the reported alerts. "
                           "There are 5 existing severities: n/a, info, low, medium, and high.")
     },
@@ -57,7 +57,7 @@ _DEFAULT_GRAPHS = [
         'title': N_("Timeline"),
         'category': "chronology",
         'type': "timeline",
-        'path': "idmefv2.severity",
+        'path': "idmefv2.priority",
         'description': N_("This graph shows the evolution of the alerts severities over time.")
     },
     {
@@ -220,9 +220,9 @@ class AlertStats(StaticStats):
             "path": "idmefv2.reference",
         },
         {
-            "title": N_("Alert: Severity"),
+            "title": N_("Alert: Priority"),
             "category": "diagram",
-            "path": "idmefv2.severity",
+            "path": "idmefv2.priority",
         },
         {
             "title": N_("Top {limit} Alert Impact Types"),
