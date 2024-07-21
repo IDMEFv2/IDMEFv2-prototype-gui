@@ -315,6 +315,13 @@ class ElasticsearchQuery(object):
         if self.criteria:
             self._set_criteria(self.criteria)
 
+		# @FIXME ordering in datasearch idmefv2 is not working
+        if self._query["sort"] == []:
+            class A(object):
+                field = self._time_field
+                order = "desc"
+            self._add_order(A())
+
     def _init_query_criteria(self):
         return {
             "bool": {
