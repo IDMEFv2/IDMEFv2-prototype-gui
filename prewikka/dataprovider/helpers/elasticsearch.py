@@ -115,19 +115,19 @@ class ElasticsearchInstance(dataprovider.DataProviderInstance):
         self.type = config.es_type
         self._client = ElasticsearchClient(name, config)
 
-    def get_values(self, paths, criteria, distinct, limit, offset, highlight=None):
+    def get_values(self, paths, criteria, distinct, limit, offset, highlight=None, pathss = None):
         env.request.user.check("%s_VIEW" % self.type.upper())
 
         if limit < 0:
             # cannot be more than index.max_result_window, which default to 10000
             limit = 10000
 
-        results = self._client.query(paths, criteria, limit, offset, highlight)
+        results = self._client.query(paths, criteria, limit, offset, highlight, pathss)
 
         return results.api_results
 
     def get(self, criteria, paths, limit, offset):
-        return self.get_values([], criteria, False, limit, offset)
+        return self.get_values([], criteria, False, limit, offset, pathss = env.dataprovider._normalize("idmefv2", paths).parsed_paths)
 
 
 class ElasticsearchClient(object):
@@ -221,8 +221,8 @@ class ElasticsearchClient(object):
 
         raise error.PrewikkaUserError(N_("Request error"), err)
 
-    def query(self, path, criteria, limit=50, offset=0, highlight=None):
-        search = ElasticsearchQuery(self._type, self._version, self._mapping, path, criteria, limit, offset, highlight)
+    def query(self, path, criteria, limit=50, offset=0, highlight=None, pathss=None):
+        search = ElasticsearchQuery(self._type, self._version, self._mapping, path, criteria, limit, offset, highlight, pathss)
         results = self.request("/_search", search.get_json_query())
 
         return ElasticsearchResult(self._type, self._mapping, results.json(), search, limit)
@@ -275,7 +275,8 @@ class ElasticsearchQuery(object):
         CriterionOperator.NOT_REGEX_NOCASE: ("must_not", "regexp"),
     }
 
-    def __init__(self, type, version, mapping, path, criteria, limit=50, offset=0, highlight=None):
+    def __init__(self, type, version, mapping, path, criteria, limit=50, offset=0, highlight=None, pathss=None):
+        self._orderby = pathss
         self._type = type
         self._version = version
         self._mapping = mapping
@@ -315,8 +316,16 @@ class ElasticsearchQuery(object):
         if self.criteria:
             self._set_criteria(self.criteria)
 
+        if self._orderby is not None:
+            for o in self._orderby:
+                if o.commands[0].startswith('order'):
+                    class A(object):
+                        field = ".".join(o.get_path().path.split('.')[1:]).replace('(0)','').replace('(1)','')
+                        order = o.commands[0][6:]
+                    self._add_order(A())
+
 		# @FIXME ordering in datasearch idmefv2 is not working
-        if self._query["sort"] == []:
+        elif self._query["sort"] == []:
             class A(object):
                 field = self._time_field
                 order = "desc"
