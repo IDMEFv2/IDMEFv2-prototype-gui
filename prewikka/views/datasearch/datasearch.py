@@ -580,14 +580,14 @@ class DataSearch(view.View):
 
     def csv_download(self):
         grid = utils.json.loads(env.request.parameters["datasearch_grid"], object_pairs_hook=collections.OrderedDict)
-        with utils.mkdownload("table.csv") as dl:
+        with utils.mkdownload("table.csv", "w+") as dl:
             w = csv.writer(dl)
 
             if grid:
                 w.writerow(grid[0].keys())
 
             for row in grid:
-                w.writerow(map(lambda x: x.encode("utf8"), row.values()))
+                w.writerow(row.values())
 
         return dl
 
