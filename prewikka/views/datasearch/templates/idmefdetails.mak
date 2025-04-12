@@ -68,35 +68,47 @@
         <div class="panel-body">
           <table class="table table-striped table-bordered">
             <tr>
-              <th>${ _("Name") }</th>
-              <th>${ _("Model") }</th>
+              <th>${ _("Category") }</th>
+              <th>${ _("Data") }</th>
+              <th>${ _("Geolocation") }</th>
               <th>${ _("Hostname") }</th>
               <th>${ _("IP") }</th>
-              <th>${ _("Location") }</th>
             </tr>
             <tr>
-              <td>${ alert.get('analyzer.name') }</td>
-              <td>${ alert.get('analyzer.model') }</td>
-              <td>${ alert.get('analyzer.hostname') }</td>
-              <td>${ alert.get('analyzer.ip') }</td>
-              <td>${ alert.get('analyzer.location') }</td>
+              <td>${ ", ".join(alert.get('analyzer').get('category', []) + alert.get('analyzer').get('ext_category', [])) }</td>
+              <td>${ ", ".join(alert.get('analyzer').get('data', []) + alert.get('analyzer').get('ext_data', [])) }</td>
+              <td>${ alert.get('analyzer').get('geolocation') }</td>
+              <td>${ alert.get('analyzer').get('hostname') }</td>
+              <td>${ alert.get('analyzer').get('ip') }</td>
             </tr>
           </table>
           <table class="table table-striped table-bordered">
             <tr>
-              <th>${ _("Category") }</th>
-              <th>${ _("Data") }</th>
+              <th>${ _("Location") }</th>
+              <th>${ _("Model") }</th>
               <th>${ _("Method") }</th>
             </tr>
             <tr>
-              <td>${ ", ".join(alert.get('analyzer.category', []) + alert.get('analyzer.ext_category', [])) }</td>
-              <td>${ ", ".join(alert.get('analyzer.data', []) + alert.get('analyzer.ext_data', [])) }</td>
-              <td>${ ", ".join(alert.get('analyzer.method', []) + alert.get('analyzer.ext_method', [])) }</td>
+              <td>${ alert.get('analyzer').get('location') }</td>
+              <td>${ alert.get('analyzer').get('model') }</td>
+              <td>${ ", ".join(alert.get('analyzer').get('method', []) + alert.get('analyzer').get('ext_method', [])) }</td>
+            </tr>
+          </table>
+          <table class="table table-striped table-bordered">
+            <tr>
+              <th>${ _("Name") }</th>
+              <th>${ _("Type") }</th>
+              <th>${ _("UN Location") }</th>
+            </tr>
+            <tr>
+              <td>${ alert.get('analyzer').get('name') }</td>
+              <td>${ alert.get('analyzer').get('type') }</td>
+              <td>${ alert.get('analyzer').get('un_location') }</td>
             </tr>
           </table>
         </div>
       </div>
-      % if alert.get('sensor.name'):
+      % if alert.get('sensor'):
       <div class="panel panel-theme">
         <div class="panel-heading">
           <h3 class="panel-title">${ _("Sensor") }</h3>
@@ -111,17 +123,17 @@
               <th>${ _("Location") }</th>
             </tr>
             <tr>
-              <td>${ alert.get('sensor.name') }</td>
-              <td>${ alert.get('sensor.model') }</td>
-              <td>${ alert.get('sensor.hostname') }</td>
-              <td>${ alert.get('sensor.ip') }</td>
-              <td>${ alert.get('sensor.location') }</td>
+              <td>${ alert.get('sensor')[0].get('name') }</td>
+              <td>${ alert.get('sensor')[0].get('model') }</td>
+              <td>${ alert.get('sensor')[0].get('hostname') }</td>
+              <td>${ alert.get('sensor')[0].get('ip') }</td>
+              <td>${ alert.get('sensor')[0].get('location') }</td>
             </tr>
           </table>
         </div>
       </div>
       % endif
-      % if alert.get('source.ip'):
+      % if alert.get('source'):
       <div class="panel panel-theme">
         <div class="panel-heading">
           <h3 class="panel-title">${ _("Source") }</h3>
@@ -134,9 +146,9 @@
               <th>${ _("Location") }</th>
             </tr>
             <tr>
-              <td>${ alert.get('source.hostname') }</td>
-              <td>${ alert.get('source.ip') }</td>
-              <td>${ alert.get('source.location') }</td>
+              <td>${ alert.get('source')[0].get('hostname') }</td>
+              <td>${ alert.get('source')[0].get('ip') }</td>
+              <td>${ alert.get('source')[0].get('location') }</td>
             </tr>
           </table>
           <table class="table table-striped table-bordered">
@@ -147,16 +159,16 @@
               <th>${ _("User") }</th>
             </tr>
             <tr>
-              <td>${ alert.get('source.service') }</td>
-              <td>${ ", ".join(alert.get('source.port', [])) }</td>
-              <td>${ alert.get('source.email') }</td>
-              <td>${ alert.get('source.user') }</td>
+              <td>${ alert.get('source')[0].get('service') }</td>
+              <td>${ ", ".join([str(x) for x in alert.get('source')[0].get('port', [])]) }</td>
+              <td>${ alert.get('source')[0].get('email') }</td>
+              <td>${ alert.get('source')[0].get('user') }</td>
             </tr>
           </table>
         </div>
       </div>
       % endif
-      % if alert.get('target.ip'):
+      % if alert.get('target'):
       <div class="panel panel-theme">
         <div class="panel-heading">
           <h3 class="panel-title">${ _("Target") }</h3>
@@ -169,9 +181,9 @@
               <th>${ _("Location") }</th>
             </tr>
             <tr>
-              <td>${ alert.get('target.hostname') }</td>
-              <td>${ alert.get('target.ip') }</td>
-              <td>${ alert.get('target.location') }</td>
+              <td>${ alert.get('target')[0].get('hostname') }</td>
+              <td>${ alert.get('target')[0].get('ip') }</td>
+              <td>${ alert.get('target')[0].get('location') }</td>
             </tr>
           </table>
           <table class="table table-striped table-bordered">
@@ -182,16 +194,16 @@
               <th>${ _("User") }</th>
             </tr>
             <tr>
-              <td>${ alert.get('target.service') }</td>
-              <td>${ ", ".join(alert.get('target.port', [])) }</td>
-              <td>${ alert.get('target.email') }</td>
-              <td>${ alert.get('target.user') }</td>
+              <td>${ alert.get('target')[0].get('service') }</td>
+              <td>${ ", ".join([str(x) for x in alert.get('target')[0].get('port', [])]) }</td>
+              <td>${ alert.get('target')[0].get('email') }</td>
+              <td>${ alert.get('target')[0].get('user') }</td>
             </tr>
           </table>
         </div>
       </div>
       % endif
-      % if alert.get('vector.name'):
+      % if alert.get('vector'):
       <div class="panel panel-theme">
         <div class="panel-heading">
           <h3 class="panel-title">${ _("Vector") }</h3>
@@ -204,15 +216,15 @@
               <th>${ _("Location") }</th>
             </tr>
             <tr>
-              <td>${ alert.get('vector.name') }</td>
-              <td>${ alert.get('vector.size') }</td>
-              <td>${ alert.get('vector.location') }</td>
+              <td>${ alert.get('vector')[0].get('name') }</td>
+              <td>${ alert.get('vector')[0].get('size') }</td>
+              <td>${ alert.get('vector')[0].get('location') }</td>
             </tr>
           </table>
         </div>
       </div>
       % endif
-      % if alert.get('attachment.file_name'):
+      % if alert.get('attachment'):
       <div class="panel panel-theme">
         <div class="panel-heading">
           <h3 class="panel-title">${ _("Attachment") }</h3>
@@ -226,10 +238,10 @@
               <th>${ _("Content type") }</th>
             </tr>
             <tr>
-              <td>${ alert.get('attachment.file_name') }</td>
-              <td>${ alert.get('attachment.hash') }</td>
-              <td>${ alert.get('attachment.size') }</td>
-              <td>${ alert.get('attachment.content_type') }</td>
+              <td>${ alert.get('attachment')[0].get('file_name') }</td>
+              <td>${ alert.get('attachment')[0].get('hash') }</td>
+              <td>${ alert.get('attachment')[0].get('size') }</td>
+              <td>${ alert.get('attachment')[0].get('content_type') }</td>
             </tr>
           </table>
           <table class="table table-striped table-bordered">
@@ -237,7 +249,7 @@
               <th>${ _("Content") }</th>
             </tr>
             <tr>
-              <td>${ alert.get('attachment.content') }</td>
+              <td>${ alert.get('attachment')[0].get('content') }</td>
             </tr>
           </table>
         </div>
