@@ -192,12 +192,14 @@
               <th>${ _("Port") }</th>
               <th>${ _("Email") }</th>
               <th>${ _("User") }</th>
+              <th>${ _("Category") }</th>
             </tr>
             <tr>
               <td>${ alert.get('target')[0].get('service') }</td>
               <td>${ ", ".join([str(x) for x in alert.get('target')[0].get('port', [])]) }</td>
               <td>${ alert.get('target')[0].get('email') }</td>
               <td>${ alert.get('target')[0].get('user') }</td>
+              <td>${ alert.get('target')[0].get('category') }</td>
             </tr>
           </table>
         </div>
