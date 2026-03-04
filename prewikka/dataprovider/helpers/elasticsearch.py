@@ -157,6 +157,7 @@ class ElasticsearchClient(object):
         return self._request((self._url if with_index else self._host) + path, data, method, **kwargs)
 
     def _request(self, url, data="", method="POST", **kwargs):
+        env.log.warning("oooooooooooooooooo" + url)
         try:
             if self._user:
                 kwargs['auth'] = (self._user, self._password)

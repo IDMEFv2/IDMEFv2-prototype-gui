@@ -441,6 +441,7 @@ class DataSearch(view.View):
         view.route("/%s/forensic/ajax_infos" % self.name, self.ajax_infos)
         view.route("/%s/forensic/ajax_groupby" % self.name, self.ajax_groupby)
         view.route("/%s/forensic/csv_download" % self.name, self.csv_download, methods=["POST"])
+        view.route("/%s/forensic/delete_alert" % self.name, self.delete_alert, methods=["POST"])
         view.route("/%s/forensic" % self.name, self.forensic, menu=(section, tabs[0]), keywords=["listing", "inheritable"],
                    datatype=self.type, priority=1, help="#%sforensic" % self.type, methods=["POST", "GET"])
         view.route("/%s/dashboard" % self.name, self.dashboard, menu=(section, tabs[1]),
@@ -511,7 +512,9 @@ class DataSearch(view.View):
         return itertools.chain(hookmanager.trigger("HOOK_DATASEARCH_%s" % name, *args), hookmanager.trigger("HOOK_DATASEARCH_%s_%s" % (self.type.upper(), name), *args))
 
     def get_forensic_actions(self):
-        return [resource.HTMLNode("button", _("CSV export"), formaction=url_for(".csv_download"), type="submit", form="datasearch_export_form",
+        return [resource.HTMLNode("button", _("Delete"), formaction=url_for(".delete_alert"), type="submit", form="datasearch_export_form",
+                                  _class="btn btn-default needone", _sortkey="delete", _icon="fa-file-excel-o"),
+                resource.HTMLNode("button", _("CSV export"), formaction=url_for(".csv_download"), type="submit", form="datasearch_export_form",
                                   _class="btn btn-default needone", _sortkey="download", _icon="fa-file-excel-o")]
 
     def dashboard(self, groupby=[]):
@@ -577,6 +580,13 @@ class DataSearch(view.View):
 
         return self.query_parser(query, groupby=groupby, orderby=orderby,
                                  offset=(page - 1) * limit, limit=limit, parent=self)
+
+    def delete_alert(self):
+        grid = utils.json.loads(env.request.parameters["datasearch_grid"], object_pairs_hook=collections.OrderedDict)
+        for e in grid:
+          criteria = Criterion("idmefv2.id", "==", e['id'])
+          env.dataprovider.delete(criteria, type="idmefv2")
+        return response.PrewikkaResponse({"type": "reload", "target": "view"})
 
     def csv_download(self):
         grid = utils.json.loads(env.request.parameters["datasearch_grid"], object_pairs_hook=collections.OrderedDict)

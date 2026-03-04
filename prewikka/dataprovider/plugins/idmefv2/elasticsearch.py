@@ -29,6 +29,7 @@
 
 from prewikka.dataprovider.helpers.elasticsearch import ElasticsearchPlugin
 from prewikka import version
+import json
 
 
 class ElasticsearchIDMEFv2Plugin(ElasticsearchPlugin):
@@ -37,3 +38,14 @@ class ElasticsearchIDMEFv2Plugin(ElasticsearchPlugin):
     plugin_copyright = version.__copyright__
     plugin_description = N_("Plugin for querying IDMEFv2 from Elasticsearch")
     type = "idmefv2"
+
+    def delete(self, criteria, paths):
+        d = { "query": {
+                "match": {
+                  "ID": criteria.right
+                }
+              }
+            }
+        ret = self._client.request("/_delete_by_query", data=json.dumps(d), method="POST")
+        self._client.request("/_refresh", method="POST")
+        return ret
