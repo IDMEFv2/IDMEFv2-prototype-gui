@@ -106,8 +106,19 @@ def process(request):
     if request.method in ('GET', 'HEAD', 'OPTIONS', 'TRACE'):
         return
 
-    if request.get_origin() != request.get_target_origin():
-        raise Exception("Origin check failed")
+    origin = request.get_origin()
+    target = request.get_target_origin()
+
+    if origin != target:
+        xf_proto = request.headers.get("x-forwarded-proto")
+        xf_host = request.headers.get("x-forwarded-host")
+
+        forwarded_origin = None
+        if xf_proto and xf_host:
+            forwarded_origin = f"{xf_proto}://{xf_host}"
+
+        if origin != forwarded_origin:
+            raise Exception("Origin check failed")
 
     if request._csrf_cookie is None:
         raise Exception("CSRF cookie not set")
