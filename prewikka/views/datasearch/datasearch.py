@@ -441,6 +441,7 @@ class DataSearch(view.View):
         view.route("/%s/forensic/ajax_infos" % self.name, self.ajax_infos)
         view.route("/%s/forensic/ajax_groupby" % self.name, self.ajax_groupby)
         view.route("/%s/forensic/csv_download" % self.name, self.csv_download, methods=["POST"])
+        view.route("/%s/forensic/json_download" % self.name, self.json_download, methods=["POST"])
         view.route("/%s/forensic/delete_alert" % self.name, self.delete_alert, methods=["POST"])
         view.route("/%s/forensic" % self.name, self.forensic, menu=(section, tabs[0]), keywords=["listing", "inheritable"],
                    datatype=self.type, priority=1, help="#%sforensic" % self.type, methods=["POST", "GET"])
@@ -515,7 +516,9 @@ class DataSearch(view.View):
         return [resource.HTMLNode("button", _("Delete"), formaction=url_for(".delete_alert"), type="submit", form="datasearch_export_form",
                                   _class="btn btn-default needone", _sortkey="delete", _icon="fa-file-excel-o"),
                 resource.HTMLNode("button", _("CSV export"), formaction=url_for(".csv_download"), type="submit", form="datasearch_export_form",
-                                  _class="btn btn-default needone", _sortkey="download", _icon="fa-file-excel-o")]
+                                  _class="btn btn-default needone", _sortkey="csv_download", _icon="fa-file-excel-o"),
+                resource.HTMLNode("button", _("JSON export"), formaction=url_for(".json_download"), type="submit", form="datasearch_export_form",
+                                  _class="btn btn-default needone", _sortkey="json_download", _icon="fa-file-excel-o")]
 
     def dashboard(self, groupby=[]):
         return self.forensic(groupby, is_dashboard=True)
@@ -598,6 +601,17 @@ class DataSearch(view.View):
 
             for row in grid:
                 w.writerow(row.values())
+
+        return dl
+
+    def json_download(self):
+        grid = utils.json.loads(env.request.parameters["datasearch_grid"], object_pairs_hook=collections.OrderedDict)
+        with utils.mkdownload("table.json", "w+") as dl:
+            ret = []
+            for row in grid:
+                alert = env.dataprovider.get(Criterion("idmefv2.id", "==", row['id']))[0]._obj.obj["idmefv2"]
+                ret.append(alert)
+            dl.write(json.dumps(ret, indent=4))
 
         return dl
 
