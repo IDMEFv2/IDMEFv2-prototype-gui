@@ -1,10 +1,18 @@
 <%
+
     def get_panel_class(priority):
         return {
             "low": "panel-success",
             "medium": "panel-warning",
             "high": "panel-danger"
         }.get(priority, "panel-default")
+
+    def get_ext_val(getter):
+        if len(getter) == 0:
+            return []
+        else:
+            return [getter]
+
 %>
 
 <div class="container">
@@ -40,7 +48,7 @@
               <th>${ _("Note") }</th>
             </tr>
             <tr>
-              <td>${ ", ".join(alert.get('category', []) + alert.get('ext_category', [])) }</td>
+              <td>${ ", ".join(alert.get('category', []) + get_ext_val(alert.get('ext_category', []))) }</td>
               <td>${ alert.get('description') }</td>
               <td>${ alert.get('note') }</td>
             </tr>
@@ -75,8 +83,8 @@
               <th>${ _("IP") }</th>
             </tr>
             <tr>
-              <td>${ ", ".join(alert.get('analyzer').get('category', []) + alert.get('analyzer').get('ext_category', [])) }</td>
-              <td>${ ", ".join(alert.get('analyzer').get('data', []) + alert.get('analyzer').get('ext_data', [])) }</td>
+              <td>${ ", ".join(alert.get('analyzer').get('category', []) + get_ext_val(alert.get('analyzer').get('ext_category', []))) }</td>
+              <td>${ ", ".join(alert.get('analyzer').get('data', []) + get_ext_val(alert.get('analyzer').get('ext_data', []))) }</td>
               <td>${ alert.get('analyzer').get('geolocation') }</td>
               <td>${ alert.get('analyzer').get('hostname') }</td>
               <td>${ alert.get('analyzer').get('ip') }</td>
@@ -91,7 +99,7 @@
             <tr>
               <td>${ alert.get('analyzer').get('location') }</td>
               <td>${ alert.get('analyzer').get('model') }</td>
-              <td>${ ", ".join(alert.get('analyzer').get('method', []) + alert.get('analyzer').get('ext_method', [])) }</td>
+              <td>${ ", ".join(alert.get('analyzer').get('method', []) + get_ext_val(alert.get('analyzer').get('ext_method', []))) }</td>
             </tr>
           </table>
           <table class="table table-striped table-bordered">
