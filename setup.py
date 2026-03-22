@@ -280,11 +280,13 @@ setup(
             'RiskOverview = prewikka.views.riskoverview:RiskOverview',
             'Statistics = prewikka.views.statistics:Statistics',
             'UserManagement = prewikka.views.usermanagement:UserManagement',
+            'InputPlugin = prewikka.views.inputplugin:InputPlugin',
         ],
         'prewikka.updatedb': [
             'prewikka = prewikka.sql',
             'prewikka.auth.dbauth = prewikka.auth.dbauth.sql',
-            'prewikka.plugins.filter = prewikka.plugins.filter.sql'
+            'prewikka.plugins.filter = prewikka.plugins.filter.sql',
+            'prewikka.views.inputplugin = prewikka.views.inputplugin.sql',
         ]
     },
     package_data={
@@ -312,6 +314,7 @@ setup(
         'prewikka.views.riskoverview': ["htdocs/js/*.js"],
         'prewikka.views.statistics': ["htdocs/js/*.js", "htdocs/css/*.css"],
         'prewikka.views.usermanagement': ["htdocs/js/*.js", "htdocs/css/*.css"],
+        'prewikka.views.inputplugin': ["templates/*.mak","sql/*.py","htdocs/css/*.css","htdocs/js/*.js"],
     },
     scripts=[
         "scripts/prewikka-cli",
