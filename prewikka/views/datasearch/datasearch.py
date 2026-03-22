@@ -37,6 +37,7 @@ import itertools
 import operator
 import pkg_resources
 import re
+from typing import Mapping
 
 from prewikka.utils import json
 from prewikka import error, history, hookmanager, mainmenu, resource, response, template, utils, view
@@ -604,13 +605,93 @@ class DataSearch(view.View):
 
         return dl
 
+
+    def transform_keys(self, obj, m):
+        """Applique key_transform aux clés (str) de manière récursive."""
+        env.log.warning(obj)
+        if isinstance(obj, Mapping):
+            return {
+                (m.get(k, k) if isinstance(k, str) else k): self.transform_keys(v, m)
+                for k, v in obj.items()
+            }
+        elif isinstance(obj, list):
+            return [self.transform_keys(x, m) for x in obj]
+        elif isinstance(obj, tuple):
+            return tuple(self.transform_keys(x, m) for x in obj)
+        elif isinstance(obj, set):
+            return {self.transform_keys(x, m) for x in obj}
+        else:
+            return obj
+
+
+    def map_idmefv2(self, idmefv2):
+        m = {
+                "version": "Version",
+                "id": "ID",
+                "entityid": "EntityId",
+                "entityname": "EntityName",
+                "organisationname": "OrganisationName",
+                "organisationid": "OrganisationId",
+                "category": "Category",
+                "ext_category": "ext-Category",
+                "cause": "Cause",
+                "description": "Description",
+                "status": "Status",
+                "priority": "Priority",
+                "confidence": "Confidence",
+                "note": "Note",
+                "create_time": "CreateTime",
+                "start_time": "StartTime",
+                "end_time": "EndTime",
+                "alt_names": "AltNames",
+                "alt_category": "AltCategory",
+                "reference": "Ref",
+                "correl_id": "CorrelID",
+                "aggr_condition": "AggrCondition",
+                "pred_id": "PredID",
+                "rel_id": "RelID",
+                "analyzer": "Analyzer",
+                "source" : "Source",
+                "sensor" : "Sensor",
+                "target" : "Target",
+                "vector": "Vector",
+                "attachment" : "Attachment",
+                "ip": "IP",
+                "name": "Name",
+                "hostname": "Hostname",
+                "model": "Model",
+                "type": "Type",
+                "data": "Data",
+                "ext_data": "ext-Data",
+                "method": "Method",
+                "ext_method": "ext-Method",
+                "geolocation": "GeoLocation",
+                "un_location": "UnLocation",
+                "location": "Location",
+                "capture_zone": "CaptureZone",
+                "ti": "TI",
+                "user": "User",
+                "email": "Email",
+                "protocol": "Protocol",
+                "port": "Port",
+                "service": "Service",
+                "file_name": "FileName",
+                "hash": "Hash",
+                "size": "Size",
+                "external_uri": "ExternalURI",
+                "content_type": "ContentType",
+                "content_encoding": "ContentEncoding",
+                "content": "Content"
+        }
+        return self.transform_keys(idmefv2, m)
+
     def json_download(self):
         grid = utils.json.loads(env.request.parameters["datasearch_grid"], object_pairs_hook=collections.OrderedDict)
         with utils.mkdownload("table.json", "w+") as dl:
             ret = []
             for row in grid:
                 alert = env.dataprovider.get(Criterion("idmefv2.id", "==", row['id']))[0]._obj.obj["idmefv2"]
-                ret.append(alert)
+                ret.append(self.map_idmefv2(alert))
             dl.write(json.dumps(ret, indent=4))
 
         return dl
