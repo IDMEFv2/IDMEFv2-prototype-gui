@@ -55,7 +55,7 @@ class InputPluginView(view.View):
         url = "http://logstash:4690"
         resp = requests.post(url, headers={"Content-Type": "application/json"}, data=json.dumps(idmefv2))
 
-    @view.route("/inputplugin", methods=["GET"], permissions=[N_("IDMEF_VIEW")], menu=(N_("Alerts"), N_("Inject IDMEFv2")))
+    @view.route("/inputplugin", methods=["GET"], permissions=[N_("IDMEF_VIEW")], menu=(N_("Alerts"), N_("Import IDMEFv2")))
     def inputplugin(self):
         dset = template.PrewikkaTemplate(__name__, "templates/inputplugin.mak").dataset()
         dset["idmefv2files"] = self._db.get_files()
