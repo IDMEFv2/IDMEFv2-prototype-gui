@@ -2,7 +2,8 @@
 
 <%!
 from prewikka import utils, env
-software = env.config.interface.get("software", "<img src='prewikka/images/prelude-logo.png' alt='Prelude' />")
+import pkg_resources
+software = "<div>" + pkg_resources.get_distribution('prewikka').version + " " + env.config.interface.get("software", "<img src='prewikka/images/prelude-logo.png' alt='Prelude' />") + "</div>"
 %>
 
 <div id="prewikka-notifications-container"></div>
